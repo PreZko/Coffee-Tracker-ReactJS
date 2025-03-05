@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { coffeeOptions } from '../utils'
 import Modal from './Modal'
 import Authentication from './Authentication'
+import { useAuth } from '../context/AuthContext'
+import { doc, setDoc } from 'firebase/firestore'
+import { db } from '../../firebase'
 
 export default function CoffeeForm(props) {
   const { isAuthenticated } = props
@@ -12,23 +15,62 @@ export default function CoffeeForm(props) {
   const [hour, setHour] = useState(0)
   const [min, setMin] = useState(0)
 
-  function handleSubmitForm() {
+  const { globalData, setGlobalData, globalUser } = useAuth()
+
+  //Submit a new coffee entry
+  async function handleSubmitForm() {
     if (!isAuthenticated) {
       setShowModal(true)
       return
     }
-    console.log(selectedCoffee, coffeeCost, hour, min)
+
+    if (!selectedCoffee) return
+
+    try {
+      const newGlobalData = { ...(globalData || {}) }
+
+      const nowTime = Date.now()
+      const timeToSubtract = hour * 60 * 60 * 1000 + min * 60 * 1000
+      const timestamp = nowTime - timeToSubtract
+
+      const newData = {
+        name: selectedCoffee,
+        cost: coffeeCost,
+      }
+
+      newGlobalData[timestamp] = newData
+
+      console.log(timestamp, selectedCoffee, coffeeCost)
+
+      setGlobalData(newGlobalData)
+
+      const userRef = doc(db, 'users', globalUser.uid)
+      const res = await setDoc(
+        userRef,
+        {
+          [timestamp]: newData,
+        },
+        { merge: true }
+      )
+
+      setSelectedCoffee(null)
+      setHour(0)
+      setMin(0)
+      setCoffeeCost(0)
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  function handleCloseModal() {
+    setShowModal(false)
   }
 
   return (
     <>
       {showModal && (
-        <Modal
-          handleCloseModal={() => {
-            setShowModal(false)
-          }}
-        >
-          <Authentication />
+        <Modal handleCloseModal={handleCloseModal}>
+          <Authentication handleCloseModal={handleCloseModal} />
         </Modal>
       )}
       <div className='section-header'>
@@ -110,8 +152,8 @@ export default function CoffeeForm(props) {
             id='hours-select'
           >
             {[
-              0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-              20, 21, 22, 23,
+              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+              19, 20, 21, 22, 23,
             ].map((hour, hourIndex) => {
               return (
                 <option key={hourIndex} value={hour}>

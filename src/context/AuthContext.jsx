@@ -39,9 +39,20 @@ export function AuthProvider(props) {
     return signOut(auth)
   }
 
+  const value = {
+    globalUser,
+    globalData,
+    setGlobalData,
+    isLoading,
+    signup,
+    login,
+    logout,
+  }
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       console.log('Current user:', user)
+      setGlobalUser(user)
       if (!user) {
         console.log('No active user')
         return
@@ -56,6 +67,7 @@ export function AuthProvider(props) {
         if (docSnap.exists()) {
           console.log('Found user data')
           firebaseData = docSnap.data()
+          console.log(firebaseData)
         }
         setGlobalData(firebaseData)
       } catch (err) {
@@ -66,16 +78,6 @@ export function AuthProvider(props) {
     })
     return unsubscribe
   }, [])
-
-  const value = {
-    globalUser,
-    globalData,
-    setGlobalData,
-    isLoading,
-    signup,
-    login,
-    logout,
-  }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

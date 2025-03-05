@@ -244,7 +244,6 @@ export function calculateCoffeeStats(coffeeConsumptionHistory) {
       : 0
   const averageDailyCost =
     totalDaysWithCoffee > 0 ? (totalCost / totalDaysWithCoffee).toFixed(2) : 0
-  console.log(totalCost, typeof totalCost)
   return {
     daily_caffeine: averageDailyCaffeine,
     daily_cost: averageDailyCost,
