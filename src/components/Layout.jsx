@@ -46,7 +46,7 @@ export default function Layout(props) {
         Check out the project on{' '}
         <a
           target='_blank'
-          href='https://github.com/PreZko/Coffee-Tracker-ReactJS'
+          href='https://github.com/presiyanbankov/Coffee-Tracker-ReactJS'
         >
           GitHub
         </a>

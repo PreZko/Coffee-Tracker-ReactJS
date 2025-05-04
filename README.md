@@ -44,7 +44,7 @@ A modern web application for coffee enthusiasts to track caffeine intake and ana
 
 1. **Clone Repository**
    ```bash
-   git clone https://github.com/PreZko/Coffee-Tracker-ReactJS
+   git clone https://github.com/presiyanbankov/Coffee-Tracker-ReactJS
    cd Coffee-Tracker-ReactJS
    ```
 2. **Install Dependencies**
@@ -99,4 +99,4 @@ If you'd like to connect or have any questions, feel free to reach out:
 
 - **Email**: presiyan_bankov@gmail.com
 - **LinkedIn**: [Presiyan Bankov](https://linkedin.com/in/presiyan-bankov)
-- **GitHub**: [PreZko](https://github.com/prezko)
+- **GitHub**: [presiyanbankov](https://github.com/presiyanbankov)
